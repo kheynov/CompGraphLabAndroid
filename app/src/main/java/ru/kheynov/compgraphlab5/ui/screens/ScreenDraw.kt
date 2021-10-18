@@ -72,7 +72,7 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            Text("DRAWING $id")
+            Text("DRAWING A ${PolygonsShapes.values()[id].name}")
         }
 
     }
