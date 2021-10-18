@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import ru.kheynov.compgraphlab5.PolygonsShapes
 import ru.kheynov.compgraphlab5.ui.theme.CompGraphLab5Theme
 
 @Composable
@@ -18,28 +19,21 @@ fun ScreenInput(navController: NavHostController) {
 
         Column(
             modifier = Modifier
-                .fillMaxHeight(0.5f)
+                .fillMaxHeight(0.9f)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(
-                modifier = Modifier.fillMaxWidth(0.7f),
-                onClick = { navController.navigate(ScreenRoutes.SCREEN_DRAW.name + "/0") }) {
-                Text(text = "DRAW A STAR")
-            }
-            Button(
-                modifier = Modifier.fillMaxWidth(0.7f),
-                onClick = { navController.navigate(ScreenRoutes.SCREEN_DRAW.name + "/1") }) {
-                Text(text = "DRAW A SQUARE")
-            }
-            Button(
-                modifier = Modifier.fillMaxWidth(0.7f),
-                onClick = { navController.navigate(ScreenRoutes.SCREEN_DRAW.name + "/2") }) {
-                Text(text = "DRAW A TRIANGLE")
+            for (i in PolygonsShapes.values().indices) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(0.7f),
+                    onClick = { navController.navigate(ScreenRoutes.SCREEN_DRAW.name + "/$i") }) {
+                    Text(text = "DRAW A ${PolygonsShapes.values()[i].name}")
+                }
             }
         }
-
     }
 
 }
+
+
