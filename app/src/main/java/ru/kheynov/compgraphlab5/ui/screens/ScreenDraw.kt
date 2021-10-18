@@ -12,7 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PointMode
 import androidx.navigation.NavHostController
+import ru.kheynov.compgraphlab5.PolygonsShapes
 import kotlin.math.roundToInt
 
 @Composable
@@ -22,7 +24,6 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         Canvas(modifier = Modifier
             .fillMaxWidth()
             .weight(15f), onDraw = {
@@ -47,6 +48,22 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                     Offset(width, i.toFloat() * cellSize)
                 )
             }
+            val points = PolygonsShapes.values()[id].points
+            val pointsToDraw = mutableListOf<Offset>()
+            points.forEach {
+                pointsToDraw.add(Offset(it.x * cellSize, it.y * cellSize))
+            }
+            drawPoints(
+                points = pointsToDraw,
+                strokeWidth = 10f,
+                pointMode = PointMode.Points,
+                color = Color.White
+            )
+
+            for (i in 1 until pointsToDraw.size) {
+                drawLine(Color.Yellow, pointsToDraw[i - 1], pointsToDraw[i])
+            }
+            drawLine(Color.Yellow, pointsToDraw.first(), pointsToDraw.last())
 
         })
         Button(
