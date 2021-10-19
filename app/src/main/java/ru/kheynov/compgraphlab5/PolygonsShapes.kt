@@ -34,8 +34,7 @@ enum class PolygonsShapes(val points: List<Offset>) {
         Offset(6f, 6f),
         Offset(9f, 9f),
         Offset(5f, 13f),
-        Offset(3f, 12f),
-        Offset(2f, 8f),
+        Offset(3f, 12f)
 
     )),
 
