@@ -42,7 +42,7 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
         }
         val animationIntState = animateIntAsState(
             targetValue = animationTargetState.value,
-            animationSpec = tween(durationMillis = 3000)
+            animationSpec = tween(durationMillis = 6000)
         )
 
         Canvas(modifier = Modifier
@@ -104,7 +104,7 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                 drawLine(Color.Yellow, pointsToDraw.first(), pointsToDraw.last())
                 val rows = getRows(points = intersectedPoints.toTypedArray())
                 animationTargetState.value = rows.size
-
+                rows.sortBy{ it }
                 //current drawing line for 'paint out' algorithm
                 for (i in 0 until animationIntState.value) {
 
