@@ -104,11 +104,28 @@ fun getIntersectionPoints(
         if ((points[index].y * cellSize > points[previousIndex].y * cellSize && points[index].y * cellSize > points[nextIndex].y * cellSize) ||
             (points[index].y * cellSize < points[previousIndex].y * cellSize && points[index].y * cellSize < points[nextIndex].y * cellSize)
         ) {
-            intersectionPoints.removeAll { it.x == points[index].x * cellSize &&
-                    it.y == points[index].y * cellSize }
+            intersectionPoints.removeAll {
+                it.x == points[index].x * cellSize &&
+                        it.y == points[index].y * cellSize
+            }
         }
     }
 
     return intersectionPoints.toTypedArray()
 }
 
+fun getRows(
+    points: Array<Offset>
+): Array<Float> {
+    val rows = ArrayList<Float>()
+    var row = 0f
+    for (point in points) {
+        if (point.y != row) {
+            row = point.y
+            if (!rows.contains(row)) {
+                rows.add(row)
+            }
+        }
+    }
+    return rows.toTypedArray()
+}
