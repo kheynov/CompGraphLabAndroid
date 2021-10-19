@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PointMode
 import androidx.navigation.NavHostController
 import ru.kheynov.compgraphlab5.PolygonsShapes
+import ru.kheynov.compgraphlab5.getIntersectionPoints
 import kotlin.math.roundToInt
 
 @Composable
@@ -80,8 +81,22 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                     color = Color.White
                 )
 
+                drawPoints(
+                    points = getIntersectionPoints(
+                        PolygonsShapes.values()[id].points.toTypedArray(),
+                        start = 0,
+                        end = 20,
+                        step = 1,
+                        width.toDouble(),
+                        cellSize = cellSize
+                    ).toList(),
+                    strokeWidth = 10f,
+                    pointMode = PointMode.Points,
+                    color = Color.Green
+                )
+
                 //drawing a border for a polygon
-                for (i in 0 until pointsToDraw.size-1) {
+                for (i in 0 until pointsToDraw.size - 1) {
                     drawLine(
                         Color.Yellow,
                         pointsToDraw[i],
@@ -90,7 +105,8 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                 }
                 drawLine(Color.Yellow, pointsToDraw.first(), pointsToDraw.last())
 
-                val currentLine = animationIntState.value //current drawing line for 'paint out' algorithm
+                val currentLine =
+                    animationIntState.value //current drawing line for 'paint out' algorithm
 
             })
 
