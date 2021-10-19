@@ -86,7 +86,7 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                         PolygonsShapes.values()[id].points.toTypedArray(),
                         start = 0,
                         end = height.toInt(),
-                        step = cellSize/4,
+                        step = cellSize / 4,
                         width.toDouble(),
                         cellSize = cellSize
                     ).toList(),
@@ -105,8 +105,8 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                 }
                 drawLine(Color.Yellow, pointsToDraw.first(), pointsToDraw.last())
 
-                val currentLine =
-                    animationIntState.value //current drawing line for 'paint out' algorithm
+                //current drawing line for 'paint out' algorithm
+                val currentLine = animationIntState.value
 
             })
 

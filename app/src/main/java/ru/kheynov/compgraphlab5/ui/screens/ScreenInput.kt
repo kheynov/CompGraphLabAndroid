@@ -35,5 +35,3 @@ fun ScreenInput(navController: NavHostController) {
     }
 
 }
-
-
