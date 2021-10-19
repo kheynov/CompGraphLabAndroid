@@ -3,7 +3,6 @@ package ru.kheynov.compgraphlab5.ui.screens
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +20,7 @@ import androidx.compose.ui.graphics.PointMode
 import androidx.navigation.NavHostController
 import ru.kheynov.compgraphlab5.PolygonsShapes
 import ru.kheynov.compgraphlab5.getIntersectionPoints
+import ru.kheynov.compgraphlab5.getRows
 import kotlin.math.roundToInt
 
 @Composable
@@ -47,11 +47,7 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
 
         Canvas(modifier = Modifier
             .fillMaxWidth()
-            .weight(15f)
-            .clickable {
-                // Change the target state to start the animation
-                animationTargetState.value = pointsToDraw.size - 1
-            },
+            .weight(15f),
             onDraw = {
 
                 val width = this.size.width
@@ -81,15 +77,17 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                     color = Color.White
                 )
 
+                val intersectedPoints = getIntersectionPoints(
+                    PolygonsShapes.values()[id].points.toTypedArray(),
+                    start = 0,
+                    end = height.toInt(),
+                    step = cellSize / 4,
+                    width.toDouble(),
+                    cellSize = cellSize
+                ).toList()
+
                 drawPoints(
-                    points = getIntersectionPoints(
-                        PolygonsShapes.values()[id].points.toTypedArray(),
-                        start = 0,
-                        end = height.toInt(),
-                        step = cellSize / 4,
-                        width.toDouble(),
-                        cellSize = cellSize
-                    ).toList(),
+                    points = intersectedPoints,
                     strokeWidth = 10f,
                     pointMode = PointMode.Points,
                     color = Color.Green
@@ -104,11 +102,42 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                     )
                 }
                 drawLine(Color.Yellow, pointsToDraw.first(), pointsToDraw.last())
+                val rows = getRows(points = intersectedPoints.toTypedArray())
+                animationTargetState.value = rows.size
 
                 //current drawing line for 'paint out' algorithm
-                val currentLine = animationIntState.value
+                for (i in 0 until animationIntState.value) {
 
-            })
+                    val rowPoints = mutableListOf<Offset>()
+                    for (point in intersectedPoints) {
+                        if (point.y == rows[i] && !rowPoints.contains(point)) {
+                            rowPoints.add(point)
+                        }
+                    }
+                    rowPoints.sortBy { it.x }
+
+                    if (rowPoints.size == 2) {
+                        drawLine(
+                            Color.Cyan,
+                            Offset(rowPoints[0].x, rowPoints[0].y),
+                            Offset(rowPoints[1].x, rowPoints[1].y)
+                        )
+                    } else {
+                        drawLine(
+                            Color.Cyan,
+                            Offset(rowPoints[0].x, rowPoints[0].y),
+                            Offset(rowPoints[1].x, rowPoints[1].y)
+                        )
+                        drawLine(
+                            Color.Cyan,
+                            Offset(rowPoints[2].x, rowPoints[2].y),
+                            Offset(rowPoints[3].x, rowPoints[3].y)
+                        )
+                    }
+                }
+
+            }
+        )
 
         Button(//button that returns to main screen
             onClick = { navController.popBackStack() },
@@ -116,7 +145,7 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            Text("DRAWING A ${PolygonsShapes.values()[id].name}")
+            Text("BACK")
         }
 
     }
