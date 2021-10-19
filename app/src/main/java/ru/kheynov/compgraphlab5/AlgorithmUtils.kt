@@ -5,7 +5,7 @@ import androidx.compose.ui.geometry.Offset
 fun isIntersectsRow(
     rowY: Double,
     rowLength: Double,
-    line: Array<Array<Int>> //[(x1,y1), (x2, y2)]
+    line: Array<Array<Double>> //[(x1,y1), (x2, y2)]
 ): Boolean {
     val x1 = 0
     val x3 = line[0][0]
@@ -30,17 +30,17 @@ fun getIntersectionPoints(
     cellSize: Int
 ): Array<Offset> {
     val intersectionPoints = ArrayList<Offset>()
-    val lines = mutableListOf<Array<Array<Int>>>()
+    val lines = mutableListOf<Array<Array<Double>>>()
     for (i in 0 until points.size - 1) {
         lines.add(
             arrayOf(
                 arrayOf(
-                    points[i].x.toInt() * cellSize,
-                    points[i].y.toInt() * cellSize
+                    points[i].x.toDouble() * cellSize,
+                    points[i].y.toDouble() * cellSize
                 ),
                 arrayOf(
-                    points[i + 1].x.toInt() * cellSize,
-                    points[i + 1].y.toInt() * cellSize
+                    points[i + 1].x.toDouble() * cellSize,
+                    points[i + 1].y.toDouble() * cellSize
                 )
             )
         )
@@ -48,12 +48,12 @@ fun getIntersectionPoints(
     lines.add(
         arrayOf(
             arrayOf(
-                points.first().x.toInt() * cellSize,
-                points.first().y.toInt() * cellSize
+                points.first().x.toDouble() * cellSize,
+                points.first().y.toDouble() * cellSize
             ),
             arrayOf(
-                points.last().x.toInt() * cellSize,
-                points.last().y.toInt() * cellSize
+                points.last().x.toDouble() * cellSize,
+                points.last().y.toDouble() * cellSize
             )
         )
     )
@@ -65,8 +65,7 @@ fun getIntersectionPoints(
                     getIntersectionPoint(
                         row.toDouble()*cellSize,
                         rowLength,
-                        line,
-                        cellSize
+                        line
                     )
                 )
             }
@@ -79,8 +78,7 @@ fun getIntersectionPoints(
 fun getIntersectionPoint(
     rowY: Double,
     rowLength: Double,
-    line: Array<Array<Int>>,
-    cellSize: Int
+    line: Array<Array<Double>>
 ): Offset {
     val x1 = 0
     val x3 = line[0][0]
