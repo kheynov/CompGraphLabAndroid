@@ -91,15 +91,19 @@ fun getIntersectionPoints(
     }
 
     for (index in points.indices) {
-        if (index == 0) {
-            previousIndex = points.size - 1
-            nextIndex = index + 1
-        } else if (index == points.size - 1) {
-            nextIndex = 0
-            previousIndex = index - 1
-        } else {
-            nextIndex = index + 1
-            previousIndex = index - 1
+        when (index) {
+            0 -> {
+                previousIndex = points.size - 1
+                nextIndex = index + 1
+            }
+            points.size - 1 -> {
+                nextIndex = 0
+                previousIndex = index - 1
+            }
+            else -> {
+                nextIndex = index + 1
+                previousIndex = index - 1
+            }
         }
         if ((points[index].y * cellSize > points[previousIndex].y * cellSize && points[index].y * cellSize > points[nextIndex].y * cellSize) ||
             (points[index].y * cellSize < points[previousIndex].y * cellSize && points[index].y * cellSize < points[nextIndex].y * cellSize)
