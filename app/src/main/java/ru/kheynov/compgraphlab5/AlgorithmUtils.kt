@@ -60,10 +60,10 @@ fun getIntersectionPoints(
 
     for (row in (start until end step step)) {
         for (line in lines) {
-            if (isIntersectsRow(row.toDouble()*cellSize, rowLength, line)) {
+            if (isIntersectsRow(row.toDouble(), rowLength, line)) {
                 intersectionPoints.add(
                     getIntersectionPoint(
-                        row.toDouble()*cellSize,
+                        row.toDouble(),
                         rowLength,
                         line
                     )

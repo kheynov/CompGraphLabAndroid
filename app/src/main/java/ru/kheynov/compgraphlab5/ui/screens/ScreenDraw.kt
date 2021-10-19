@@ -85,8 +85,8 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                     points = getIntersectionPoints(
                         PolygonsShapes.values()[id].points.toTypedArray(),
                         start = 0,
-                        end = 20,
-                        step = 1,
+                        end = height.toInt(),
+                        step = cellSize/4,
                         width.toDouble(),
                         cellSize = cellSize
                     ).toList(),
