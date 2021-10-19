@@ -20,6 +20,21 @@ fun isIntersectsRow(
     return t in 0.0..1.0 && u in 0.0..1.0
 }
 
+fun getIntersectionPoint(
+    rowY: Double,
+    rowLength: Double,
+    line: Array<Array<Double>>
+): Array<Double> {
+    val x1 = 0
+    val x3 = line[0][0]
+    val x4 = line[1][0]
+    val y3 = line[0][1]
+    val y4 = line[1][1]
+    val t =
+        ((x1 - x3) * (y3 - y4) - (rowY - y3) * (x3 - x4)) / ((x1 - rowLength) * (y3 - y4) - (rowY - rowY) * (x3 - x4))
+    val x = t * rowLength
+    return arrayOf(x, rowY)
+}
 
 fun getIntersectionPoints(
     points: Array<Offset>,
@@ -57,36 +72,43 @@ fun getIntersectionPoints(
             )
         )
     )
+    var previousIndex: Int
+    var nextIndex: Int
+    for (line in lines) {
+        for (row in (start until end step step)) {
 
-    for (row in (start until end step step)) {
-        for (line in lines) {
             if (isIntersectsRow(row.toDouble(), rowLength, line)) {
+                val intersectedPoint = getIntersectionPoint(
+                    row.toDouble(),
+                    rowLength,
+                    line
+                )
                 intersectionPoints.add(
-                    getIntersectionPoint(
-                        row.toDouble(),
-                        rowLength,
-                        line
-                    )
+                    Offset(intersectedPoint[0].toFloat(), intersectedPoint[1].toFloat())
                 )
             }
+        }
+    }
+
+    for (index in points.indices) {
+        if (index == 0) {
+            previousIndex = points.size - 1
+            nextIndex = index + 1
+        } else if (index == points.size - 1) {
+            nextIndex = 0
+            previousIndex = index - 1
+        } else {
+            nextIndex = index + 1
+            previousIndex = index - 1
+        }
+        if ((points[index].y * cellSize > points[previousIndex].y * cellSize && points[index].y * cellSize > points[nextIndex].y * cellSize) ||
+            (points[index].y * cellSize < points[previousIndex].y * cellSize && points[index].y * cellSize < points[nextIndex].y * cellSize)
+        ) {
+            intersectionPoints.removeAll { it.x == points[index].x * cellSize &&
+                    it.y == points[index].y * cellSize }
         }
     }
 
     return intersectionPoints.toTypedArray()
 }
 
-fun getIntersectionPoint(
-    rowY: Double,
-    rowLength: Double,
-    line: Array<Array<Double>>
-): Offset {
-    val x1 = 0
-    val x3 = line[0][0]
-    val x4 = line[1][0]
-    val y3 = line[0][1]
-    val y4 = line[1][1]
-    val t =
-        ((x1 - x3) * (y3 - y4) - (rowY - y3) * (x3 - x4)) / ((x1 - rowLength) * (y3 - y4) - (rowY - rowY) * (x3 - x4))
-    val x = t * rowLength
-    return Offset(x.toFloat(), rowY.toFloat())
-}
