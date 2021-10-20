@@ -131,7 +131,7 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                             Offset(rowPoints[0][0], rowPoints[0][1]),
                             Offset(rowPoints[1][0], rowPoints[1][1])
                         )
-                    } else {
+                    } else if (rowPoints.size == 4) {
                         drawLine(
                             Color.Cyan,
                             Offset(rowPoints[0][0], rowPoints[0][1]),
