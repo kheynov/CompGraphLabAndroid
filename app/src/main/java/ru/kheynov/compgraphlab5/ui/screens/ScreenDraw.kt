@@ -20,11 +20,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PointMode
 import androidx.navigation.NavHostController
 import ru.kheynov.compgraphlab5.PolygonsShapes
+import ru.kheynov.compgraphlab5.findInArray
 import ru.kheynov.compgraphlab5.getIntersectionPoints
 import ru.kheynov.compgraphlab5.getRows
 import ru.kheynov.compgraphlab5.ui.theme.canvasBackground
 import ru.kheynov.compgraphlab5.ui.theme.lineColor
-import ru.kheynov.compgraphlab5.ui.theme.primaryColor
 import kotlin.math.roundToInt
 
 @Composable
@@ -40,7 +40,7 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
 
         val pointsToDraw = mutableListOf<Offset>()
         PolygonsShapes.values()[id].points.forEach {
-            pointsToDraw.add(Offset(it.x * cellSize, it.y * cellSize))
+            pointsToDraw.add(Offset(it[0] * cellSize, it[1] * cellSize))
         }//getting a points coordinates
 
         val animationTargetState = remember {//remembering a state of currently drawing line
@@ -84,16 +84,19 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                 )
 
                 val intersectedPoints = getIntersectionPoints(
-                    PolygonsShapes.values()[id].points.toTypedArray(),
+                    PolygonsShapes.values()[id].points,
                     start = 0,
                     end = height.toInt(),
                     step = cellSize / 4,
-                    width.toDouble(),
+                    width,
                     cellSize = cellSize
                 ).toList()
-
+                val intersectedPointsOffset = mutableListOf<Offset>()
+                intersectedPoints.forEach {
+                    intersectedPointsOffset.add(Offset(it[0], it[1]))
+                }
                 drawPoints(
-                    points = intersectedPoints,
+                    points = intersectedPointsOffset.toList(),
                     strokeWidth = 10f,
                     pointMode = PointMode.Points,
                     color = Color.Green
@@ -114,30 +117,30 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                 //current drawing line for 'paint out' algorithm
                 for (i in 0 until animationIntState.value) {
 
-                    val rowPoints = mutableListOf<Offset>()
+                    val rowPoints = mutableListOf<Array<Float>>()
                     for (point in intersectedPoints) {
-                        if (point.y == rows[i] && !rowPoints.contains(point)) {
+                        if (point[1] == rows[i] && !findInArray(point, rowPoints.toTypedArray())) {
                             rowPoints.add(point)
                         }
                     }
-                    rowPoints.sortBy { it.x }
+                    rowPoints.sortBy { it[0] }
 
                     if (rowPoints.size == 2) {
                         drawLine(
                             Color.Cyan,
-                            Offset(rowPoints[0].x, rowPoints[0].y),
-                            Offset(rowPoints[1].x, rowPoints[1].y)
+                            Offset(rowPoints[0][0], rowPoints[0][1]),
+                            Offset(rowPoints[1][0], rowPoints[1][1])
                         )
                     } else {
                         drawLine(
                             Color.Cyan,
-                            Offset(rowPoints[0].x, rowPoints[0].y),
-                            Offset(rowPoints[1].x, rowPoints[1].y)
+                            Offset(rowPoints[0][0], rowPoints[0][1]),
+                            Offset(rowPoints[1][0], rowPoints[1][1])
                         )
                         drawLine(
                             Color.Cyan,
-                            Offset(rowPoints[2].x, rowPoints[2].y),
-                            Offset(rowPoints[3].x, rowPoints[3].y)
+                            Offset(rowPoints[2][0], rowPoints[2][1]),
+                            Offset(rowPoints[3][0], rowPoints[3][1])
                         )
                     }
                 }

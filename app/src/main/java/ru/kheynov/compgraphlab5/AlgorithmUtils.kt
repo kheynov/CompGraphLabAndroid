@@ -1,11 +1,9 @@
 package ru.kheynov.compgraphlab5
 
-import androidx.compose.ui.geometry.Offset
-
 fun isIntersectsRow(
-    rowY: Double,
-    rowLength: Double,
-    line: Array<Array<Double>> //[(x1,y1), (x2, y2)]
+    rowY: Float,
+    rowLength: Float,
+    line: Array<Array<Float>> //[(x1,y1), (x2, y2)]
 ): Boolean {
     val x1 = 0
     val x3 = line[0][0]
@@ -21,10 +19,10 @@ fun isIntersectsRow(
 }
 
 fun getIntersectionPoint(
-    rowY: Double,
-    rowLength: Double,
-    line: Array<Array<Double>>
-): Array<Double> {
+    rowY: Float,
+    rowLength: Float,
+    line: Array<Array<Float>>
+): Array<Float> {
     val x1 = 0
     val x3 = line[0][0]
     val x4 = line[1][0]
@@ -37,25 +35,25 @@ fun getIntersectionPoint(
 }
 
 fun getIntersectionPoints(
-    points: Array<Offset>,
+    points: Array<Array<Float>>,
     start: Int,
     end: Int,
     step: Int,
-    rowLength: Double,
+    rowLength: Float,
     cellSize: Int
-): Array<Offset> {
-    val intersectionPoints = ArrayList<Offset>()
-    val lines = mutableListOf<Array<Array<Double>>>()
+): Array<Array<Float>> {
+    val intersectionPoints = ArrayList<Array<Float>>()
+    val lines = mutableListOf<Array<Array<Float>>>()
     for (i in 0 until points.size - 1) {
         lines.add(
             arrayOf(
                 arrayOf(
-                    points[i].x.toDouble() * cellSize,
-                    points[i].y.toDouble() * cellSize
+                    points[i][0] * cellSize,
+                    points[i][1] * cellSize
                 ),
                 arrayOf(
-                    points[i + 1].x.toDouble() * cellSize,
-                    points[i + 1].y.toDouble() * cellSize
+                    points[i + 1][0] * cellSize,
+                    points[i + 1][1] * cellSize
                 )
             )
         )
@@ -63,12 +61,12 @@ fun getIntersectionPoints(
     lines.add(
         arrayOf(
             arrayOf(
-                points.first().x.toDouble() * cellSize,
-                points.first().y.toDouble() * cellSize
+                points.first()[0] * cellSize,
+                points.first()[1] * cellSize
             ),
             arrayOf(
-                points.last().x.toDouble() * cellSize,
-                points.last().y.toDouble() * cellSize
+                points.last()[0] * cellSize,
+                points.last()[1] * cellSize
             )
         )
     )
@@ -77,15 +75,13 @@ fun getIntersectionPoints(
     for (line in lines) {
         for (row in (start until end step step)) {
 
-            if (isIntersectsRow(row.toDouble(), rowLength, line)) {
+            if (isIntersectsRow(row.toFloat(), rowLength, line)) {
                 val intersectedPoint = getIntersectionPoint(
-                    row.toDouble(),
+                    row.toFloat(),
                     rowLength,
                     line
                 )
-                intersectionPoints.add(
-                    Offset(intersectedPoint[0].toFloat(), intersectedPoint[1].toFloat())
-                )
+                intersectionPoints.add(arrayOf(intersectedPoint[0], intersectedPoint[1]))
             }
         }
     }
@@ -105,12 +101,12 @@ fun getIntersectionPoints(
                 previousIndex = index - 1
             }
         }
-        if ((points[index].y * cellSize > points[previousIndex].y * cellSize && points[index].y * cellSize > points[nextIndex].y * cellSize) ||
-            (points[index].y * cellSize < points[previousIndex].y * cellSize && points[index].y * cellSize < points[nextIndex].y * cellSize)
+        if ((points[index][1] * cellSize > points[previousIndex][1] * cellSize && points[index][1] * cellSize > points[nextIndex][1] * cellSize) ||
+            (points[index][1] * cellSize < points[previousIndex][1] * cellSize && points[index][1] * cellSize < points[nextIndex][1] * cellSize)
         ) {
             intersectionPoints.removeAll {
-                it.x == points[index].x * cellSize &&
-                        it.y == points[index].y * cellSize
+                it[0] == points[index][0] * cellSize &&
+                        it[1] == points[index][1] * cellSize
             }
         }
     }
@@ -119,17 +115,27 @@ fun getIntersectionPoints(
 }
 
 fun getRows(
-    points: Array<Offset>
+    points: Array<Array<Float>>
 ): Array<Float> {
     val rows = ArrayList<Float>()
     var row = 0f
     for (point in points) {
-        if (point.y != row) {
-            row = point.y
+        if (point[1] != row) {
+            row = point[1]
             if (!rows.contains(row)) {
                 rows.add(row)
             }
         }
     }
     return rows.toTypedArray()
+}
+
+fun findInArray(
+    point: Array<Float>,
+    points: Array<Array<Float>>
+): Boolean {
+    for (i in points) {
+        if (point[0] == i[0] && point[1] == i[1]) return true
+    }
+    return false
 }

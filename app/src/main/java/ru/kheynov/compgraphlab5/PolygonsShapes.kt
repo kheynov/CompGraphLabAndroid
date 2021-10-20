@@ -1,27 +1,25 @@
 package ru.kheynov.compgraphlab5
 
-import androidx.compose.ui.geometry.Offset
 
-enum class PolygonsShapes(val points: List<Offset>) {
-    SQUARE(points = listOf(
-        Offset(3f, 5f),
-        Offset(8f, 5f),
-        Offset(8f, 10f),
-        Offset(3f, 10f)
+enum class PolygonsShapes(val points: Array<Array<Float>>) {
+    SQUARE(points = arrayOf(
+        arrayOf(3f, 5f),
+        arrayOf(8f, 5f),
+        arrayOf(8f, 10f),
+        arrayOf(3f, 10f)
+    )
+    ),
+    TRIANGLE(points = arrayOf(
+        arrayOf(4f, 2f),
+        arrayOf(8f, 6f),
+        arrayOf(5f, 10f)
     )),
-    TRIANGLE(points = listOf(
-        Offset(4f, 2f),
-        Offset(8f, 6f),
-        Offset(5f, 10f)
+    SOME_POLYGON(points = arrayOf(
+        arrayOf(2f, 8f),
+        arrayOf(4.5f, 9f),
+        arrayOf(6f, 6f),
+        arrayOf(9f, 9f),
+        arrayOf(5f, 13f),
+        arrayOf(3f, 12f)
     )),
-    SOME_POLYGON(points = listOf(
-        Offset(2f, 8f),
-        Offset(4.5f, 9f),
-        Offset(6f, 6f),
-        Offset(9f, 9f),
-        Offset(5f, 13f),
-        Offset(3f, 12f)
-
-    )),
-
 }
