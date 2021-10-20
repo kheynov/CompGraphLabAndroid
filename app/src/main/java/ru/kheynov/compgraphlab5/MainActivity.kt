@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CompGraphLab5Theme(darkTheme = true) {
+            CompGraphLab5Theme {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,

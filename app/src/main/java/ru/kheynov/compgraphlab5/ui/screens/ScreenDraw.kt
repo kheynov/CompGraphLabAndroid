@@ -3,6 +3,7 @@ package ru.kheynov.compgraphlab5.ui.screens
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,14 +22,19 @@ import androidx.navigation.NavHostController
 import ru.kheynov.compgraphlab5.PolygonsShapes
 import ru.kheynov.compgraphlab5.getIntersectionPoints
 import ru.kheynov.compgraphlab5.getRows
+import ru.kheynov.compgraphlab5.ui.theme.canvasBackground
+import ru.kheynov.compgraphlab5.ui.theme.lineColor
+import ru.kheynov.compgraphlab5.ui.theme.primaryColor
 import kotlin.math.roundToInt
 
 @Composable
 fun ScreenDraw(navController: NavHostController, id: Int) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(canvasBackground),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         val cellSize = 100//grid cell size
 
@@ -56,14 +62,14 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                 //drawing a grid
                 for (i in 0 until (width / cellSize).roundToInt()) {
                     drawLine(
-                        Color.DarkGray,
+                        lineColor,
                         Offset(i.toFloat() * cellSize, 0f),
                         Offset(i.toFloat() * cellSize, height)
                     )
                 }
                 for (i in 0 until (height / cellSize).roundToInt()) {
                     drawLine(
-                        Color.DarkGray,
+                        lineColor,
                         Offset(0f, i.toFloat() * cellSize),
                         Offset(width, i.toFloat() * cellSize)
                     )
@@ -104,7 +110,7 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                 drawLine(Color.Yellow, pointsToDraw.first(), pointsToDraw.last())
                 val rows = getRows(points = intersectedPoints.toTypedArray())
                 animationTargetState.value = rows.size
-                rows.sortBy{ it }
+                rows.sortBy { it }
                 //current drawing line for 'paint out' algorithm
                 for (i in 0 until animationIntState.value) {
 
@@ -139,14 +145,14 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
             }
         )
 
-        Button(//button that returns to main screen
-            onClick = { navController.popBackStack() },
+        Button(
+//button that returns to main screen
             modifier = Modifier
                 .weight(1f)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            onClick = { navController.popBackStack() },
         ) {
             Text("BACK")
         }
-
     }
 }
