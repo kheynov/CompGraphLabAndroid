@@ -87,7 +87,7 @@ fun ScreenDraw(navController: NavHostController, id: Int) {
                     PolygonsShapes.values()[id].points,
                     start = 0,
                     end = height.toInt(),
-                    step = cellSize / 4,
+                    step = cellSize / 5,
                     width,
                     cellSize = cellSize
                 ).toList()
